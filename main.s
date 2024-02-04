@@ -1,49 +1,49 @@
-	.file	"_main.c"			
+	.file	"main.c"
 	.intel_syntax noprefix
 	.text
-	.globl	name						; global specifier for name variable
-	.section	.rodata					; Section specification
+	.globl	name
+	.section	.rodata
 .LC0:
-	.string	"Anonimus"					; String Constant
-	.section	.data.rel.local,"aw"	
-	.align 8					
-	.type	name, @object	
+	.string	"Anonimus"
+.LC1:
+	.string	"No name provided"
+.LC2:
+	.string	"Error: %s"
+.LC3:
+	.string	"Hello %s"
+	.section	.data.rel.local,"aw"
+	.align 8
+	.type	name, @object
 	.size	name, 8
 name:
-	.quad	.LC0						; name global variable, initialized with .LC0's pointer
-	.section	.rodata
-.LC1:
-	.string	"No name provided"			; String Constant
-.LC2:
-	.string	"Error: %s"					; String Constant
-.LC3:
-	.string	"Hello %s"					; String Constant
+	.quad	.LC0
+	.section	.rodata	
 	.text
 	.globl	main
 	.type	main, @function
-main:									; Start of main function
+main:
 .LFB6:
 	.cfi_startproc
 	endbr64
 	push	rbp
-	.cfi_def_cfa_offset 16				; Debug information
+	.cfi_def_cfa_offset 16
 	.cfi_offset 6, -16
 	mov	rbp, rsp
 	.cfi_def_cfa_register 6
-	sub	rsp, 32							; Allocate space for variable 
-	mov	DWORD PTR -20[rbp], edi			; Put argc in len var
+	sub	rsp, 32
+	mov	DWORD PTR -20[rbp], edi
 	mov	QWORD PTR -32[rbp], rsi
-	cmp	DWORD PTR -20[rbp], 2			; Compare len with 2
-	je	.L2								; If condition, Fail branch next
-	lea	rax, .LC1[rip]					; Get pointers to string constants
-	mov	rsi, rax					
-	lea	rax, .LC2[rip]					; Get pointers to string constants
+	cmp	DWORD PTR -20[rbp], 2
+	je	.L2
+	lea	rax, .LC1[rip]
+	mov	rsi, rax
+	lea	rax, .LC2[rip]
 	mov	rdi, rax
-	mov	eax, 0							
-	call	printf@PLT					; Call to printf
-	mov	edi, -1							
-	call	exit@PLT					; Call to exit
-.L2:									; Success branch
+	mov	eax, 0
+	call	printf@PLT
+	mov	edi, -1
+	call	exit@PLT
+.L2:
 	mov	rax, QWORD PTR -32[rbp]
 	mov	rax, QWORD PTR 8[rax]
 	mov	QWORD PTR name[rip], rax
